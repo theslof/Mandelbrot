@@ -1,23 +1,45 @@
 onmessage = function(e) {
-    let x = e.data[0] % e.data[1];
-    let y = Math.floor(e.data[0] / e.data[1]);
-    let belongsToSet =
-        checkIfBelongsToMandelbrotSet(x / e.data[3] - e.data[4],
-            y / e.data[3] - e.data[5], e.data[2]);
-    postMessage([e.data[0], belongsToSet]);
+    const [mandelSet, MAX_ITERATIONS, CANVAS_WIDTH, MAGNIFICATION_FACTOR, OFFSET_X, OFFSET_Y] = e.data
+    for (let iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
+        console.log(`iteration ${iteration}`)
+        let valueCalculated = false
 
+        const pixels = []
+
+        mandelSet.forEach((n, i) => {
+            const x = i % CANVAS_WIDTH
+            const y = Math.floor(i / CANVAS_WIDTH)
+            const offsetX = x / MAGNIFICATION_FACTOR - OFFSET_X
+            const offsetY = y / MAGNIFICATION_FACTOR - OFFSET_Y
+
+            if (n.result) {
+                pixels.push([x, y, n.result])
+                return
+            }
+
+            if (iteration === 0) {
+                n.real = offsetX
+                n.imag = offsetY
+            }
+
+            const value = calculateValue(n, offsetX, offsetY, iteration)
+            mandelSet[i] = value
+            valueCalculated = true
+
+            pixels.push([x, y, value.result])
+        })
+        postMessage(pixels)
+        if (!valueCalculated) break
+    }
+    console.log('done')
 };
 
-function checkIfBelongsToMandelbrotSet(x, y, iterations) {
-    let real = x;
-    let imag = y;
-    for (let i = 0; i < iterations; i++) {
-        let tReal = real * real - imag * imag + x;
-        imag = 2 * real * imag + y;
-        real = tReal;
+function calculateValue({real, imag}, x, y, iteration) {
+    const nReal = real * real - imag * imag + x
+    const nImag = 2 * real * imag + y
 
-        if (Math.sqrt(real) > 2)
-            return (i / iterations);
-    }
-    return 0;   // Return zero if in set
+    const result = Math.sqrt(nReal)
+    if (result > 2)
+        return {real: nReal, imag: nImag, result: iteration}
+    return {real: nReal, imag: nImag, result: undefined}
 }

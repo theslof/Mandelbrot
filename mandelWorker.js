@@ -1,37 +1,38 @@
 onmessage = function(e) {
-    const [mandelSet, MAX_ITERATIONS, CANVAS_WIDTH, MAGNIFICATION_FACTOR, OFFSET_X, OFFSET_Y] = e.data
+    const start_t = Date.now()
+    const [MAX_ITERATIONS, CANVAS_WIDTH, CANVAS_HEIGHT, MAGNIFICATION_FACTOR, OFFSET_X, OFFSET_Y] = e.data
+    const mandelSet = new Array(CANVAS_WIDTH * CANVAS_HEIGHT)
+
     for (let iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
-        console.log(`iteration ${iteration}`)
         let valueCalculated = false
 
         const pixels = []
 
-        mandelSet.forEach((n, i) => {
+        for (let i = 0; i < mandelSet.length; i++) {
             const x = i % CANVAS_WIDTH
             const y = Math.floor(i / CANVAS_WIDTH)
-            const offsetX = x / MAGNIFICATION_FACTOR - OFFSET_X
-            const offsetY = y / MAGNIFICATION_FACTOR - OFFSET_Y
+            const offsetX = (x - OFFSET_X) / MAGNIFICATION_FACTOR
+            const offsetY = (y - OFFSET_Y) / MAGNIFICATION_FACTOR
 
-            if (n.result) {
-                pixels.push([x, y, n.result])
-                return
+            if (mandelSet[i] && mandelSet[i].result) {
+                pixels.push(mandelSet[i].result)
+                continue
             }
 
-            if (iteration === 0) {
-                n.real = offsetX
-                n.imag = offsetY
+            if (!mandelSet[i]) {
+                mandelSet[i] = {real: offsetX, imag: offsetY}
             }
 
-            const value = calculateValue(n, offsetX, offsetY, iteration)
+            const value = calculateValue(mandelSet[i], offsetX, offsetY, iteration)
             mandelSet[i] = value
             valueCalculated = true
 
-            pixels.push([x, y, value.result])
-        })
+            pixels.push(value.result)
+        }
         postMessage(pixels)
         if (!valueCalculated) break
     }
-    console.log('done')
+    console.log(`Done in ${(Date.now() - start_t) / 1000} seconds`)
 };
 
 function calculateValue({real, imag}, x, y, iteration) {

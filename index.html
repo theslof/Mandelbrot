@@ -3,9 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+<form id="form">
+    <div>
+        <label for="CANVAS_WIDTH">Width (px)</label>
+        <input id="CANVAS_WIDTH" type="number" value="800">
+    </div>
+
+    <div>
+        <label for="CANVAS_HEIGHT">Height (px)</label>
+        <input id="CANVAS_HEIGHT" type="number" value="600">
+    </div>
+
+    <div>
+        <label for="MAGNIFICATION_FACTOR">Zoom</label>
+        <input id="MAGNIFICATION_FACTOR" type="number" value="9500">
+    </div>
+
+    <div>
+        <label for="OFFSET_X">Offset X</label>
+        <input id="OFFSET_X" type="number" value="14000">
+    </div>
+
+    <div>
+        <label for="OFFSET_Y">Offset Y</label>
+        <input id="OFFSET_Y" type="number" value="300">
+    </div>
+
+    <div>
+        <label for="MAX_ITERATIONS">Iterations</label>
+        <input id="MAX_ITERATIONS" type="number" value="30">
+    </div>
+
+    <div>
+        <button>Render</button>
+        <span id="progress" class="hidden">Rendering: <span id="progress__iterations">0</span>/<span id="progress__max">0</span></span>
+    </div>
+</form>
 <script src="mandelbrot.js"></script>
 </body>
 </html>

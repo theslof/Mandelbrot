@@ -39,8 +39,5 @@ function calculateValue({real, imag}, x, y, iteration) {
     const nReal = real * real - imag * imag + x
     const nImag = 2 * real * imag + y
 
-    const result = Math.sqrt(nReal)
-    if (result > 2)
-        return {real: nReal, imag: nImag, result: iteration}
-    return {real: nReal, imag: nImag, result: undefined}
+    return {real: nReal, imag: nImag, result: nReal > 2 ? iteration : undefined}
 }

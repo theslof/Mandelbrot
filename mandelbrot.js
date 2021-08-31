@@ -1,12 +1,16 @@
 let worker
 let progress = 0
 
-function startRender(event) {
+function stopRender(event) {
   event.preventDefault()
 
   if (worker) {
     worker.terminate()
   }
+}
+
+function startRender(event) {
+  stopRender(event)
 
   const CANVAS_WIDTH = document.getElementById('CANVAS_WIDTH').value
   const CANVAS_HEIGHT = document.getElementById('CANVAS_HEIGHT').value
@@ -16,8 +20,7 @@ function startRender(event) {
   const MAX_ITERATIONS = document.getElementById('MAX_ITERATIONS').value
 
   const elProgress = document.querySelector('#progress')
-  elProgress.querySelector('#progress__iterations').innerText = 0
-  elProgress.querySelector('#progress__max').innerText = MAX_ITERATIONS
+  elProgress.querySelector('#progress > .progress__internal').style.maxWidth = "0"
   elProgress.classList.remove('hidden')
   progress = 0
 
@@ -35,7 +38,7 @@ function startRender(event) {
   worker.onmessage = function (e) {
     const pixels = e.data
     progress++
-    elProgress.querySelector('#progress__iterations').innerText = progress
+    elProgress.querySelector('#progress > .progress__internal').style.maxWidth = progress / MAX_ITERATIONS * 100 + "%"
     renderImage(pixels)
   }
   worker.postMessage([MAX_ITERATIONS, CANVAS_WIDTH, CANVAS_HEIGHT, MAGNIFICATION_FACTOR, OFFSET_X, OFFSET_Y])
@@ -63,4 +66,5 @@ function startRender(event) {
   }
 }
 
-document.getElementById('form').addEventListener('submit', startRender)
+document.getElementById('button__render').addEventListener('click', startRender)
+document.getElementById('button__stop').addEventListener('click', stopRender)

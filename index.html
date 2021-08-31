@@ -19,7 +19,7 @@
 
     <div>
         <label for="MAGNIFICATION_FACTOR">Zoom</label>
-        <input id="MAGNIFICATION_FACTOR" type="number" value="9500">
+        <input id="MAGNIFICATION_FACTOR" type="number" value="10600">
     </div>
 
     <div>
@@ -29,18 +29,20 @@
 
     <div>
         <label for="OFFSET_Y">Offset Y</label>
-        <input id="OFFSET_Y" type="number" value="300">
+        <input id="OFFSET_Y" type="number" value="-300">
     </div>
 
     <div>
         <label for="MAX_ITERATIONS">Iterations</label>
-        <input id="MAX_ITERATIONS" type="number" value="30">
+        <input id="MAX_ITERATIONS" type="number" value="120">
     </div>
 
     <div>
-        <button>Render</button>
-        <span id="progress" class="hidden">Rendering: <span id="progress__iterations">0</span>/<span id="progress__max">0</span></span>
+        <button id="button__render">Render</button>
+        <button id="button__stop">Stop</button>
     </div>
+
+    <div id="progress" class="hidden"><div class="progress__internal" style="max-width: 0"></div></div>
 </form>
 <script src="mandelbrot.js"></script>
 </body>

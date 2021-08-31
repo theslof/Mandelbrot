@@ -1,7 +1,11 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: white;
     margin: 0;
-    padding: 0;
+    padding: 12px;
 }
 
 form > div {
@@ -15,7 +19,7 @@ label {
 
 canvas {
     background-color: white;
-    margin: 0;
+    margin-top: 12px;
     padding: 0;
     max-width: 100%;
     height: auto;
@@ -23,4 +27,20 @@ canvas {
 
 #progress.hidden {
     display: none;
+}
+
+#progress {
+    margin-top: 12px;
+    height: 8px;
+    width: 100%;
+    background: #ddd;
+    border: thin solid #4769a6;
+    border-radius: 4px;
+}
+
+#progress > .progress__internal {
+    height: 100%;
+    width: 100%;
+    transition: max-width 250ms ease;
+    background: cornflowerblue;
 }
